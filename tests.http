@@ -1,0 +1,38 @@
+# Browse Books as any user
+GET {{server}}/odata/v4/CatalogService/Books?
+  # &$select=title,stock
+  # &$expand=currency
+  &sap-locale=de
+
+@server=http://localhost:8080
+
+###
+GET {{server}}/odata/v4/CatalogService/Books
+
+###
+POST {{server}}/odata/v4/BuyService/Orders
+Content-Type: application/json;IEEE754Compatible=true
+
+{ "Items":[{"book_ID":201, "amount":5}]  }
+
+### ------------------------------------------------------------------------
+# Create book
+POST {{server}}/odata/v4/CatalogService/Books
+Content-Type: application/json;IEEE754Compatible=true
+Authorization: Basic alice:
+
+{
+  "ID": 2,
+  "title": "Poems : Pocket Poets",
+  "descr": "The Everyman's Library Pocket Poets hardcover series is popular for its compact size and reasonable price which does not compromise content. Poems: Bronte contains poems that demonstrate a sensibility elemental in its force with an imaginative discipline and flexibility of the highest order. Also included are an Editor's Note and an index of first lines.",
+  "author": { "ID": 101 },
+  "stock": 5,
+  "price": "12.05",
+  "currency_code": "USD"
+}
+
+### -------------------------------------------------------------------------
+# Browse Books as any user
+GET {{server}}/odata/v4/CatalogService/Books?
+   &$filter=ID eq 2
+
